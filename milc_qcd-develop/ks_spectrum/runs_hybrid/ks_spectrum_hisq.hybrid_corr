@@ -1,0 +1,52 @@
+---
+JobID:                        203696.kaon2.fnal.gov
+date:                         "Fri Apr  3 16:09:14 2020 UTC"
+lattice_size:                 8,8,8,8
+antiquark_type:               staggered
+antiquark_source_type:        onemp_0_source
+antiquark_source_subset:      full
+antiquark_source_label:       C
+antiquark_sink_label:         d
+antiquark_sink_ops:           [
+{ operation:                  onemp_0_source
+}
+]
+antiquark_mass:               "0.03"
+antiquark_epsilon:            0
+quark_type:                   staggered
+quark_source_type:            point
+quark_source_subset:          full
+quark_source_origin:          [ 0, 0, 0, 0 ]
+quark_source_label:           C
+quark_sink_label:             d
+quark_mass:                   "0.03"
+quark_epsilon:                0
+...
+---
+correlator:                   PION_PS
+momentum:                     p000
+spin_taste_sink:              pion5
+correlator_key:               PION_PS_C_C_d_d_m0.03_m0.03_p000
+...
+0	1.236581e-01	4.572506e-02
+1	4.454391e-02	3.357873e-02
+2	1.312973e-02	1.837688e-02
+3	9.692753e-03	-1.108337e-02
+4	5.353279e-04	6.893638e-03
+5	-1.134961e-02	-1.589712e-02
+6	-1.505191e-03	-1.022554e-02
+7	3.071575e-02	1.279096e-02
+---
+correlator:                   PION_SC
+momentum:                     p000
+spin_taste_sink:              pion05
+correlator_key:               PION_SC_C_C_d_d_m0.03_m0.03_p000
+...
+0	-2.411939e-01	-1.172423e-01
+1	-1.033569e-01	-6.486955e-02
+2	-1.762335e-02	-4.150564e-02
+3	-2.123607e-02	1.719612e-02
+4	5.026819e-03	-1.246653e-02
+5	1.868055e-02	2.680576e-02
+6	-1.567004e-03	2.584046e-02
+7	-5.920386e-02	-2.399023e-02
