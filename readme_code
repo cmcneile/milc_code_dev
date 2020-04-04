@@ -1,0 +1,25 @@
+HYBRID CODE
+------------
+
+The spectroscopy code is in ks_spectrum
+make ks_spectrum_hisq
+
+An example of running is in
+ks_spectrum/runs_hybrid/
+go.sh
+
+Changes to the code
+--------------------
+
+
+The hybrid meson routines are called in
+
+./generic/quark_source.c 
+./generic/quark_source_sink_op.c
+
+The hybrid meson code is in
+milc_qcd-develop/generic_ks/spectrum_hybrids5_v7.c
+
+
+../include//generic_quark_types.h:  ONEMP_0_SOURCE,
+../include//generic_quark_types.h:  ONEMP_LRHOZ_SOURCE
