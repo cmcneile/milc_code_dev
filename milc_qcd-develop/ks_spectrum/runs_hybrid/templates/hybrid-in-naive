@@ -34,7 +34,7 @@ number_of_base_sources 2
 
 # base source 0
 
-onemp_0_source
+onemp_lrhoz_source
 field_type KS
 subset full
 origin 0 0 0 0
@@ -56,7 +56,7 @@ number_of_modified_sources 0
 
 # source 0
 # source 0
-# onemp_0_source
+# hybrid_source
 # op_label I
 # forget_source
 
@@ -117,8 +117,8 @@ number_of_quarks 2
 
 # mass 0
 propagator 0
-##identity
-onemp_0_source
+#identity
+onemp_lrhoz_source
 op_label d
 forget_ksprop
 
@@ -139,11 +139,10 @@ spectrum_request meson
 save_corr_fnal ks_spectrum_naive.hybrid_corr
 r_offset 0 0 0 0
 
-number_of_correlators 3
+number_of_correlators 2
 
 correlator PION_PS p000  1 * 1 pion5  0 0 0 E E E
 correlator PION_SC p000  1 * 1 pion05 0 0 0 E E E           
-correlator PION_SC p000  1 * 1 pion05 0 0 0 E E E
 
 
 # Description of baryons
