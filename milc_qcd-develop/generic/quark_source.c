@@ -1290,9 +1290,9 @@ static int ask_quark_source( FILE *fp, int prompt, int *source_type,
     *source_type = ONEMM_zLOCAL_SOURCE  ;
     strcpy(descrp,"onemm_zlocal_source");
   }
-  else if(strcmp("TWOMP_zlocal_source",savebuf) == 0 ){
+  else if(strcmp("twomp_zlocal_source",savebuf) == 0 ){
     *source_type = TWOMP_zLOCAL_SOURCE  ;
-    strcpy(descrp,"TWOMP_zlocal_source");
+    strcpy(descrp,"twomp_zlocal_source");
   }
   else if(strcmp("random_complex_wall",savebuf) == 0 ){
     *source_type = RANDOM_COMPLEX_WALL;

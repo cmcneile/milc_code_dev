@@ -19,7 +19,7 @@ ARCH ?= # skx knl knc hsw pow8 pow9
 #----------------------------------------------------------------------
 # 2. Compiler family
 
-COMPILER ?= gnu # intel, ibm, portland, cray-intel
+COMPILER ?= intel # gnu, intel, ibm, portland, cray-intel
 
 #----------------------------------------------------------------------
 # 3. MPP vs Scalar
@@ -31,7 +31,7 @@ MPP ?= false
 # 4. Precision 
 
 # 1 = single precision; 2 = double
-PRECISION ?= 2
+PRECISION ?= 1
 
 #----------------------------------------------------------------------
 # 5. Compiler
