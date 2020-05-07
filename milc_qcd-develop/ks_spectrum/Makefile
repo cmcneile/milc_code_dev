@@ -31,7 +31,7 @@ MPP ?= false
 # 4. Precision 
 
 # 1 = single precision; 2 = double
-PRECISION ?= 1
+PRECISION ?= 1  
 
 #----------------------------------------------------------------------
 # 5. Compiler
@@ -286,34 +286,33 @@ MACHINE_DEP_IO   = io_ansi.o # (io_ansi.o io_nonansi.o io_dcap.o)
 
 # Edit these "wants"
 
-WANTQOP ?= # true # or blank. Implies HAVEQDP, HAVEQOP, HAVEQMP.
+WANTQOP = # true # or blank. Implies HAVEQDP, HAVEQOP, HAVEQMP.
 
-WANTQIO ?= # true # or blank.  Implies HAVEQMP.
+WANTQIO = true  # or blank.  Implies HAVEQMP.
 
-WANTQMP ?= # true or blank.
-
-# QMP_MPI or QMP_SPI
-QMP_BACKEND = QMP_MPI
+WANTQMP = # true or blank.
 
 # Edit these locations for the installed SciDAC packages
 # It is assumed that these are the parents of "include" and "lib"
 
-SCIDAC = ${HOME}/scidac/install
-TAG=
+##SCIDAC = ${HOME}/scidac/install
+#SCIDAC = /home/cmcneile/code/milc/2016/scidac/install
+SCIDAC = /home/gray/SciDAC/install
 # Parallel versions
-QMPPAR = /Users/cmcneile/code/milc/git_sept_2016/deflate/scidac/install/qmp
-QIOPAR = /Users/cmcneile/code/milc/git_sept_2016/deflate/scidac/install/qio
+#QMPPAR = ${SCIDAC}/qmp
+#QIOPAR = $(SCIDAC)/qio
 # Single processor versions
-QMPSNG = /Users/cmcneile/code/milc/git_sept_2016/deflate/scidac/install/qmp
-QIOSNG = /Users/cmcneile/code/milc/git_sept_2016/deflate/scidac/install/qio
-
-
-QLA ?= ${SCIDAC}/qla${TAG}
+QMPSNG = ${SCIDAC}/qmp/build
+QIOSNG = $(SCIDAC)/qio/build
+#QMPSNG = ${SCIDAC}/qmp
+#QIOSNG = $(SCIDAC)/qio
+#QLA = ${SCIDAC}/qla
 # Either version
-QDP ?= ${SCIDAC}/qdp${TAG}
-QOPQDP ?= ${SCIDAC}/qopqdp${TAG}
+#QDP = ${SCIDAC}/qdp
+#QOPQDP = ${SCIDAC}/qopqdp
+#QOPQDP = ${SCIDAC}/qopqdp-lapack # BG/P
 
-QOP = ${QOPQDP}
+#QOP = ${QOPQDP}
 
 # Make_template_scidac defines these macros:
 # HAVEQOP HAVEQDP HAVEQIO HAVEQMP (Says what we are compiling with)
