@@ -699,14 +699,26 @@ void mult_0mpi_field( su3_vector *src_in, su3_vector *dest ){
   }
 
   /* Loop over spatial directions */
-  for(dir=XUP; dir<=ZUP ; dir++){
+/*  for(dir=XUP; dir<=ZUP ; dir++){
          mult_by_field_strength( (dir+1)%3, (dir+2)%3, src, cg_p ); 
 	 mult_rhoi_field(dir, r0, cg_p, ttt ) ;
 
 	 FORALLSITES(i,s){
 	  add_su3_vector( dest + i,  ttt + i , dest + i ) ;
 	}
-  }
+  }*/
+ 
+mult_by_field_strength( YUP, ZUP, src, cg_p ); 
+mult_rhoi_field( XUP, r0, cg_p, ttt ) ;
+FORALLSITES(i,s){add_su3_vector( dest + i,  ttt + i , dest + i ) ;}
+
+mult_by_field_strength( XUP, ZUP, src, cg_p ); 
+mult_rhoi_field(YUP, r0, cg_p, ttt ) ;
+FORALLSITES(i,s){ add_su3_vector( dest + i,  ttt + i , dest + i ) ;}
+
+mult_by_field_strength( XUP, YUP, src, cg_p ); 
+mult_rhoi_field(ZUP, r0, cg_p, ttt ) ;
+FORALLSITES(i,s){ add_su3_vector( dest + i,  ttt + i , dest + i ) ;}
 
   destroy_v_field(ttt);
   destroy_v_field(cg_p);

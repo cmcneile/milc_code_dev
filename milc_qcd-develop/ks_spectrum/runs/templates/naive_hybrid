@@ -115,7 +115,6 @@ number_of_quarks 2
 
 # mass 0
 propagator 0
-##onemp_lrhoz_source
 identity
 op_label d
 forget_ksprop
