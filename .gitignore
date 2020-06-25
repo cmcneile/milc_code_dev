@@ -13,3 +13,4 @@ localmake
 *.test-tmp
 *.test-out
 milc_qcd-develop/ks_spectrum/runs_hybrid/corr/*
+milc_qcd-develop/ks_spectrum/ks_spectrum_hisq
