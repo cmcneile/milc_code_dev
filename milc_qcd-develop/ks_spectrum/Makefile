@@ -25,7 +25,7 @@ COMPILER = intel #  gnu intel, ibm, portland, cray-intel
 # 3. MPP vs Scalar
 
 # Compiling for a parallel machine?  blank for a scalar machine
-MPP = true
+MPP = 
 
 #----------------------------------------------------------------------
 # 4. Precision 
@@ -125,7 +125,7 @@ endif
 
 ifeq ($(strip ${COMPILER}),intel)
 
-  OCFLAGS += -std=c99
+  OCFLAGS += -std=c99 -g -O0 # g and O0 flags for debug
 
   ifeq ($(strip ${ARCH}),knl)
   ARCH_FLAG = -xMIC-AVX512
@@ -260,8 +260,8 @@ QIOPAR = $(SCIDAC)/qio_parallel
 # Single processor versions
 ##QMPSNG = ${SCIDAC}/qmp-single
 ##QIOSNG = $(SCIDAC)/qio-single
-QMPSNG = ${SCIDAC}/qmp
-QIOSNG = $(SCIDAC)/qio
+QMPSNG = ${SCIDAC}/qmp/build
+QIOSNG = $(SCIDAC)/qio/build
 #QLA = ${SCIDAC}/qla
 # Either version
 #QDP = ${SCIDAC}/qdp
