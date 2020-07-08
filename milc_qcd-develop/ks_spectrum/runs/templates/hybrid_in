@@ -13,7 +13,7 @@ job_id 203696.kaon2.fnal.gov
 # Gauge field description
 
 #reload_serial ../../binary_samples/lat.sample.l8888
-reload serial /home/gray/grid_code/grid-staggered/examples/ckpoint_ildg.4000
+reload_serial /home/gray/grid_code/grid-staggered/examples/ckpoint_ildg.4000
 u0 0.8696
 coulomb_gauge_fix
 forget
@@ -142,11 +142,9 @@ spectrum_request meson
 save_corr_fnal ks_spectrum_naive.hybrid_corr
 r_offset 0 0 0 0
 
-number_of_correlators 3
+number_of_correlators 1
 
 correlator PION_PS p000  1 * 1 pion5  0 0 0 E E E
-correlator PION_SC p000  1 * 1 pion05 0 0 0 E E E           
-correlator PION_SC p000  1 * 1 pion05 0 0 0 E E E
 
 
 # Description of baryons
