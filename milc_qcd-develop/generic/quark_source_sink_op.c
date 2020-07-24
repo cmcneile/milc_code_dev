@@ -228,6 +228,14 @@ void broadcast_quark_source_sink_op_recursive(quark_source_sink_op **qss_op){
 /* Add operator to the end of the linked list */
 
 void insert_qss_op(quark_source *qs, quark_source_sink_op *qss_op){
+  quark_source_sink_op *op;
+  printf("debug Start of insert_qss_op OPin = %d\n", qss_op->type) ;
+  int i = 0 ; 
+  qs->op = qss_op;
+  return ;
+} /* modified insert_qss_op, fixing problem with modified sources */
+
+/* void insert_qss_op(quark_source *qs, quark_source_sink_op *qss_op){
   node0_printf("DEBUG insert_qss_op() \n") ;
   
   quark_source_sink_op *op;
@@ -242,7 +250,7 @@ void insert_qss_op(quark_source *qs, quark_source_sink_op *qss_op){
     op = op->op;
   }
   op->op = qss_op;
-} /* insert_qss_op */
+}  //insert_qss_op */
 
 /* Accessor for Naik epsilon parameter in embedded KS inverse and hopping operator */
 /* Returns 0 if a Naik epsilon is not used for this operator */
