@@ -10,6 +10,8 @@
 #include "../include/io_scidac.h"
 #include <string.h>
 #define LATDIM 4
+#define QIO_PARTFILE_DIR -10000
+
 void QIO_set_trelease(double t_in, double t_out);
 
 /* Map QIO layout functions to MILC functions */
