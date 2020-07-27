@@ -52,6 +52,8 @@ static char decode_parity(char *parity_label_in);
 static double decode_factor(char *factor_op, double factor);
 static void broadcast_heap_params(void);
 
+static int initial_set(void);
+int init_hybrids() ;
 
 int setup()   {
   int prompt, dir;
@@ -1289,7 +1291,12 @@ int readin(int prompt) {
   rephase( OFF );
   ape_links = ape_smear_4D( param.staple_weight, param.ape_iter );
   if(param.time_bc == 0)apply_apbc( ape_links, param.coord_origin[3] );
+  init_hybrids() ; /** a bit of hack, field strength needs to be regenerated  **/
+  // This is in control.c as well
+
   rephase( ON );
+
+  
 
 #if EIGMODE == EIGCG
   int Nvecs_max = param.eigcgp.Nvecs_max;

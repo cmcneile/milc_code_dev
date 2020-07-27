@@ -54,6 +54,8 @@
 #include "../include/generic_grid.h"
 #endif
 
+int init_hybrids() ;
+
 int main(int argc, char *argv[])
 {
   char myname[] = "main";
@@ -231,6 +233,12 @@ int main(int argc, char *argv[])
 	destroy_ape_links_4D(ape_links);
 	ape_links = ape_smear_4D( param.staple_weight, param.ape_iter );
 	if(param.time_bc == 0)apply_apbc( ape_links, param.coord_origin[3] );
+
+	init_hybrids() ; 
+	/** a bit of hack, field strength needs to be regenerated  
+	    This is in setup.c as well
+	**/
+
 
 	rephase( ON );
 	invalidate_fermion_links(fn_links);
