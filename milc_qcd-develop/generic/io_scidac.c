@@ -4,6 +4,8 @@
 /* CD 11/2004
 */
 
+#define QIO_PARTFILE_DIR -100
+
 #include "generic_includes.h"
 #include <qio.h>
 #include "../include/io_lat.h"
