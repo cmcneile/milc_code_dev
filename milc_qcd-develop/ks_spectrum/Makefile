@@ -291,7 +291,7 @@ WANTQOP ?= # true # or blank. Implies HAVEQDP, HAVEQOP, HAVEQMP.
 
 WANTQIO = true # true # or blank.  Implies HAVEQMP.
 
-WANTQMP ?= # true or blank.
+WANTQMP ?= true # true or blank.
 
 # QMP_MPI or QMP_SPI
 QMP_BACKEND = QMP_MPI
