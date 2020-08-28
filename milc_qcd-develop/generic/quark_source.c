@@ -837,7 +837,7 @@ static int get_dirac_source(quark_source *qs, int spin, int color){
 static int v_base_source(su3_vector *src, quark_source *qs)
 { 
 	
-node0_printf("DEBUG: INSIDE v_base_source() \n") ;
+//node0_printf("DEBUG: INSIDE v_base_source() \n") ;
 
   char myname[] = "v_base_source";
   
@@ -874,7 +874,7 @@ node0_printf("DEBUG: INSIDE v_base_source() \n") ;
   /* Sources built from a complex field */
 
   else if(is_complex_source(source_type)){
-   node0_printf("DEBUG: is_complex_source - v_base_source() \n") ;
+//   node0_printf("DEBUG: is_complex_source - v_base_source() \n") ;
    get_complex_source(qs);
     insert_v_from_c(src, qs->c_src, color);
   }
@@ -882,7 +882,7 @@ node0_printf("DEBUG: INSIDE v_base_source() \n") ;
   /* Sources built from a color vector field */
 
   else if(is_vector_source(source_type)){
-    node0_printf("DEBUG: is_vector_source - v_base_source() \n") ;
+//    node0_printf("DEBUG: is_vector_source - v_base_source() \n") ;
   get_vector_source(qs);
     copy_v_field(src, qs->v_src);
   }
@@ -1098,11 +1098,11 @@ int v_source_field(su3_vector *src, quark_source *qs)
 
   /* Apply the chain of operators to the base source */
 	
-  node0_printf("DEBUG: IN v_source_field() \n") ;
+//  node0_printf("DEBUG: IN v_source_field() \n") ;
 
   op = qs->op;
   while(op != NULL){
-	node0_printf("DEBUG: INSIDE WHILE LOOP IN v_source_field() \n") ;
+//	node0_printf("DEBUG: INSIDE WHILE LOOP IN v_source_field() \n") ;
     v_field_op(src, op, qs->subset, qs->t0);
     op = op->op;
   }

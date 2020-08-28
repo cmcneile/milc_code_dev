@@ -141,7 +141,7 @@ void init_qss_op(quark_source_sink_op *qss_op){
   qss_op->t0               = 0;
   qss_op->op               = NULL;
 
-  node0_printf("DEBUG init_qss_op() \n ") ;
+//  node0_printf("DEBUG init_qss_op() \n ") ;
 } /* init_qss_op */
 
 void set_qss_op_offset(quark_source_sink_op *qss_op, int r0[]){
@@ -152,7 +152,7 @@ void set_qss_op_offset(quark_source_sink_op *qss_op, int r0[]){
 }
 
 quark_source_sink_op *create_qss_op(void){
-  node0_printf("DEBUG create_qss_op() \n") ;
+//  node0_printf("DEBUG create_qss_op() \n") ;
 quark_source_sink_op *qss_op;
   
   qss_op = (quark_source_sink_op *)malloc(sizeof(quark_source_sink_op));
@@ -169,7 +169,7 @@ quark_source_sink_op *qss_op;
 
 void destroy_qss_op(quark_source_sink_op *qss_op){
   quark_source_sink_op *op, *next_op;
-  node0_printf("DEBUG destroy_qss_op() \n") ;
+//  node0_printf("DEBUG destroy_qss_op() \n") ;
   op = qss_op;
   while(op != NULL){
     next_op = op->op;
@@ -181,7 +181,7 @@ void destroy_qss_op(quark_source_sink_op *qss_op){
 /* Create a (shallow) copy of the qss_op */
 
 static quark_source_sink_op *copy_qss_op(quark_source_sink_op *src_qss_op){
-  node0_printf("DEBUG copy_qss_op() \n") ;
+//  node0_printf("DEBUG copy_qss_op() \n") ;
 	
   quark_source_sink_op *dst_qss_op;
 
@@ -193,7 +193,7 @@ static quark_source_sink_op *copy_qss_op(quark_source_sink_op *src_qss_op){
 /* Copy the qss_op list, starting from the top */
 
 quark_source_sink_op *copy_qss_op_list(quark_source_sink_op *src_qss_op){
-  node0_printf("DEBUG copy_qss_op_list() \n") ;
+//  node0_printf("DEBUG copy_qss_op_list() \n") ;
 quark_source_sink_op *dst_qss_op, *op;
   
   if(src_qss_op == NULL)return NULL;
@@ -211,7 +211,7 @@ quark_source_sink_op *dst_qss_op, *op;
    broadcast from node 0 already */
 
 void broadcast_quark_source_sink_op_recursive(quark_source_sink_op **qss_op){
-  node0_printf("DEBUG broadcast_quark_source_sink_op() \n") ;
+//  node0_printf("DEBUG broadcast_quark_source_sink_op() \n") ;
   if(*qss_op == NULL)return;
 
   /* All nodes but node 0 make space for their operator data*/
@@ -229,7 +229,7 @@ void broadcast_quark_source_sink_op_recursive(quark_source_sink_op **qss_op){
 
 void insert_qss_op(quark_source *qs, quark_source_sink_op *qss_op){
   quark_source_sink_op *op;
-  printf("debug Start of insert_qss_op OPin = %d\n", qss_op->type) ;
+//  printf("debug Start of insert_qss_op OPin = %d\n", qss_op->type) ;
   int i = 0 ; 
   qs->op = qss_op;
   return ;
@@ -1890,7 +1890,7 @@ void v_field_op(su3_vector *src, quark_source_sink_op *qss_op,
   /* Unpack structure. */
   int op_type       = qss_op->type;
 
-  node0_printf("DEBUG Inside v_field_op(), op_type %d \n", op_type ) ;
+//  node0_printf("DEBUG Inside v_field_op(), op_type %d \n", op_type ) ;
   
   if(op_type == IDENTITY)
     return;
@@ -1918,46 +1918,46 @@ void v_field_op(su3_vector *src, quark_source_sink_op *qss_op,
     apply_aslash_v(src, qss_op, t0);
   else if(op_type == ONEMP_0_SOURCE)
     {
-      node0_printf("DEBUG onemp_0_source applied to SOURCE/SINK \n") ;                          
+//      node0_printf("DEBUG onemp_0_source applied to SOURCE/SINK \n") ;                          
       mult_1mp0_field(ZUP, src, src ) ;
 
-      //node0_printf("DEBUG 1mp epsilon applied to SOURCE/SINK \n") ;                            
+//      node0_printf("DEBUG 1mp epsilon applied to SOURCE/SINK \n") ;                            
       mult_epsilon(src,src) ;
 
     }
   else if(op_type == ONEMP_LRHOZ_SOURCE)
     {
-      node0_printf("DEBUG onemp_lrhoz applied to SOURCE/SINK \n") ;                          
+//      node0_printf("DEBUG onemp_lrhoz applied to SOURCE/SINK \n") ;                          
       mult_1mp0_lrho_field(ZUP, src, src ) ;
 
-      //node0_printf("DEBUG 1mp-local epsilon NOT applied to SOURCE/SINK \n") ;
+//      node0_printf("DEBUG 1mp-local epsilon NOT applied to SOURCE/SINK \n") ;
       //      mult_epsilon(src,src) ;                                                   
 
     }
   else if(op_type == ZEROMP_LOCAL_SOURCE )
     {
-      node0_printf("DEBUG zeromp applied to SOURCE/SINK \n") ;                          
+//      node0_printf("DEBUG zeromp applied to SOURCE/SINK \n") ;                          
       mult_0mpi_field(src, src ) ;  
 
-      //node0_printf("DEBUG 0mp epsilon NOT applied to SOURCE/SINK \n") ;
+//      node0_printf("DEBUG 0mp epsilon NOT applied to SOURCE/SINK \n") ;
       //      mult_epsilon(src,src) ;                                                   
 
     }
   else if(op_type == ONEMM_zLOCAL_SOURCE )
     {
-      node0_printf("DEBUG onemm applied to SOURCE/SINK \n") ;                          
+//      node0_printf("DEBUG onemm applied to SOURCE/SINK \n") ;                          
       mult_1mm5_field(ZUP, src, src ) ;  
 
-      //node0_printf("DEBUG 1mm epsilon NOT applied to SOURCE/SINK \n") ;
+//      node0_printf("DEBUG 1mm epsilon NOT applied to SOURCE/SINK \n") ;
       //      mult_epsilon(src,src) ;                                                   
 
     }
   else if(op_type ==  TWOMP_zLOCAL_SOURCE )
     {
-      node0_printf("DEBUG twomp applied to SINK \n") ;                          
+//      node0_printf("DEBUG twomp applied to SINK \n") ;                          
       mult_2mpi_field(ZUP, src, src ) ; 
 
-      //node0_printf("DEBUG 2mp epsilon NOT applied to SINK \n") ;
+//      node0_printf("DEBUG 2mp epsilon NOT applied to SINK \n") ;
       //      mult_epsilon(src,src) ;                                                   
 
     }
