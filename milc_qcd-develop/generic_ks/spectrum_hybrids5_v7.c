@@ -448,8 +448,6 @@ void mult_1mp0_field( int pdir, su3_vector *src_in, su3_vector *dest )
     Cross product is spin one.
     Z component = "rho_X*F_XZ + rho_Y*F_YZ.rho0
    "pdir" is the polarization direction of the meson */
-
-
 void mult_1mp0_lrho_field( int pdir, su3_vector *src_in, su3_vector *dest )
 {
   char debug[][4] = {"XUP", "YUP", "ZUP", "TUP"  };
@@ -459,7 +457,6 @@ void mult_1mp0_lrho_field( int pdir, su3_vector *src_in, su3_vector *dest )
   node0_printf("DEBUG xup %d %s\n", XUP, debug[XUP] );
   node0_printf("DEBUG yup %d %s\n", YUP, debug[YUP] );
   node0_printf("DEBUG zup %d %s\n", ZUP, debug[ZUP] );
-
   node0_printf("DEBUG pdir = %s\n", debug[pdir] );
 #endif
 
@@ -476,14 +473,20 @@ void mult_1mp0_lrho_field( int pdir, su3_vector *src_in, su3_vector *dest )
 	do_init = 0 ;
       }
 
-    if( pdir == ZUP )
-      {
-	dir_a = XUP ;
-	dir_b = YUP ;
-      }
-    else
-      {
-	if(this_node==0)printf("pdir = %d not coded up \n" , pdir);
+    if ( pdir == ZUP )
+  	{
+	  dir_a = XUP ; dir_b = YUP ;
+      	}
+    else if( pdir == YUP )
+	{ 
+	  dir_a = XUP; dir_b = ZUP;
+	}
+    else if( pdir == XUP )
+	{
+	  dir_a = YUP; dir_b = ZUP;
+	}
+        
+     if(this_node==0)printf("pdir = %d not coded up \n" , pdir);
 	terminate(0);	
       }
 
@@ -502,29 +505,6 @@ void mult_1mp0_lrho_field( int pdir, su3_vector *src_in, su3_vector *dest )
   FORALLSITES(i,s){
     clearvec( dest + i );
   }
-
-#if 0
-  /* Loop over spatial directions orthogonal to pdir */
-  for(dir=XUP; dir<=ZUP ; dir++)
-    {
-      if(dir != pdir)
-	{
-	  /* Multiply by dir,pdir component of magnetic field, 
-	     multiply by flavor gamma_0 rho (includes gamma_5 for antiquark
-	     propagator) */
-
-	 mult_by_field_strength( dir, pdir, src, cg_p );
-	// Apply the local rho operator
-	 mult_rhoi_field(dir,r0, cg_p, ttt ) ;
-
-	FORALLSITES(i,s){
-	  add_su3_vector( dest + i,  ttt + i , dest + i ) ;
-	}
-
-      } 
-
-    } /* end loop on dir */
-#endif
 
   mult_by_field_strength( dir_a, pdir, src, cg_p );
   // Apply the local rho operator

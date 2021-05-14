@@ -1907,7 +1907,25 @@ void v_field_op(su3_vector *src, quark_source_sink_op *qss_op,
       mult_epsilon(src,src) ;
 
     }
-  else if(op_type == ONEMP_LRHOZ_SOURCE)
+  else if(op_type == ONEMP_xLOCAL_SOURCE)
+    {
+      //      node0_printf("DEBUG onemp applied to SINK \n") ;                          
+      mult_1mp0_lrho_field(XUP, src, src ) ;
+
+      //node0_printf("DEBUG epsilon NOT applied to SINK \n") ;
+      //      mult_epsilon(src,src) ;                                                   
+
+    }
+  else if(op_type == ONEMP_yLOCAL_SOURCE)
+    {
+      //      node0_printf("DEBUG onemp applied to SINK \n") ;                          
+      mult_1mp0_lrho_field(YUP, src, src ) ;
+
+      //node0_printf("DEBUG epsilon NOT applied to SINK \n") ;
+      //      mult_epsilon(src,src) ;                                                   
+
+    }
+ else if(op_type == ONEMP_zLOCAL_SOURCE)
     {
       //      node0_printf("DEBUG onemp applied to SINK \n") ;                          
       mult_1mp0_lrho_field(ZUP, src, src ) ;
@@ -1916,7 +1934,7 @@ void v_field_op(su3_vector *src, quark_source_sink_op *qss_op,
       //      mult_epsilon(src,src) ;                                                   
 
     }
-  else if(op_type == ONEMM_xLOCAL_SOURCE )
+ else if(op_type == ONEMM_xLOCAL_SOURCE )
     {
       //      node0_printf("DEBUG onemp applied to SINK \n") ;                          
       mult_1mm5_field(XUP, src, src ) ;  /*  HACK **/
@@ -2210,12 +2228,20 @@ static int ask_field_op( FILE *fp, int prompt, int *source_type, char *descrp)
     *source_type = ONEMP_0_SOURCE ;
     strcpy(descrp,"onemp_0_source");
   }
-  else if(strcmp("onemp_lrhoz_source",savebuf) == 0 ){
-    *source_type = ONEMP_LRHOZ_SOURCE ;
-    strcpy(descrp,"onemp_lrhoz_source");
+  else if(strcmp("onemp_xlocal_source",savebuf) == 0 ){
+    *source_type = ONEMP_xLOCAL_SOURCE ;
+    strcpy(descrp,"onemp_xlocal_source");
+  }
+  else if(strcmp("onemp_ylocal_source",savebuf) == 0 ){
+    *source_type = ONEMP_yLOCAL_SOURCE ;
+    strcpy(descrp,"onemp_ylocal_source");
+  }
+  else if(strcmp("onemp_zlocal_source",savebuf) == 0 ){
+    *source_type = ONEMP_zLOCAL_SOURCE ;
+    strcpy(descrp,"onemp_zlocal_source");
   }
   else if(strcmp("zeromp_local_source",savebuf) == 0 ){
-    *source_type =  ZEROMP_LOCAL_SOURCE ;
+    *source_type = ZEROMP_LOCAL_SOURCE ;
     strcpy(descrp,"zeromp_local_source");
   }
   else if(strcmp("onemm_xlocal_source",savebuf) == 0 ){
@@ -2437,7 +2463,9 @@ static int get_field_op(int *status_p, FILE *fp,
   }
   else if ( op_type == IDENTITY ||
             op_type == ONEMP_0_SOURCE ||
-            op_type == ONEMP_LRHOZ_SOURCE ||
+            op_type == ONEMP_xLOCAL_SOURCE ||
+	    op_type == ONEMP_yLOCAL_SOURCE ||
+	    op_type == ONEMP_zLOCAL_SOURCE ||
             op_type == ONEMM_xLOCAL_SOURCE ||
             op_type == ONEMM_yLOCAL_SOURCE ||
             op_type == ONEMM_zLOCAL_SOURCE ||

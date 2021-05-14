@@ -679,7 +679,9 @@ int is_vector_source(int source_type){
     source_type == VECTOR_FIELD_FILE ||
     source_type == VECTOR_FIELD_FM_FILE ||
     source_type == ONEMP_0_SOURCE ||
-    source_type == ONEMP_LRHOZ_SOURCE ||
+    source_type == ONEMP_xLOCAL_SOURCE ||
+    source_type == ONEMP_yLOCAL_SOURCE ||
+    source_type == ONEMP_zLOCAL_SOURCE ||
     source_type == ONEMM_xLOCAL_SOURCE ||
     source_type == ONEMM_yLOCAL_SOURCE ||
     source_type == ONEMM_zLOCAL_SOURCE ||
@@ -719,7 +721,17 @@ static int get_vector_source(quark_source *qs){
     init_hybrids() ; /**  needs to be only done once  ***/
     mult_1mp0_field(ZUP, qs->v_src,qs->v_src ) ;
   }
-  else if(source_type == ONEMP_LRHOZ_SOURCE) {
+  else if(source_type == ONEMP_xLOCAL_SOURCE) {
+    random_color_wall(qs->v_src, t0);
+    init_hybrids() ; /**  needs to be only done once  ***/
+    mult_1mp0_lrho_field(XUP, qs->v_src,qs->v_src ) ;
+  }
+  else if(source_type == ONEMP_yLOCAL_SOURCE) {
+    random_color_wall(qs->v_src, t0);
+    init_hybrids() ; /**  needs to be only done once  ***/
+    mult_1mp0_lrho_field(YUP, qs->v_src,qs->v_src ) ;
+  }
+  else if(source_type == ONEMP_zLOCAL_SOURCE) {
     random_color_wall(qs->v_src, t0);
     init_hybrids() ; /**  needs to be only done once  ***/
     mult_1mp0_lrho_field(ZUP, qs->v_src,qs->v_src ) ;
@@ -1290,11 +1302,19 @@ static int ask_quark_source( FILE *fp, int prompt, int *source_type,
     *source_type = ONEMP_0_SOURCE  ;
     strcpy(descrp,"onemp_0_source");
   }
-  else if(strcmp("onemp_lrhoz_source",savebuf) == 0 ){
-    *source_type = ONEMP_LRHOZ_SOURCE  ;
-    strcpy(descrp,"onemp_lrhoz_source");
+  else if(strcmp("onemp_xlocal_source",savebuf) == 0 ){
+    *source_type = ONEMP_xLOCAL_SOURCE  ;
+    strcpy(descrp,"onemp_xlocal_source");
   }
-  else if(strcmp("zeromp_local_source",savebuf) == 0 ){
+ else if(strcmp("onemp_ylocal_source",savebuf) == 0 ){
+    *source_type = ONEMP_yLOCAL_SOURCE  ;
+    strcpy(descrp,"onemp_ylocal_source");
+  }
+ else if(strcmp("onemp_zlocal_source",savebuf) == 0 ){
+    *source_type = ONEMP_zLOCAL_SOURCE  ;
+    strcpy(descrp,"onemp_zlocal_source");
+  }
+ else if(strcmp("zeromp_local_source",savebuf) == 0 ){
     *source_type = ZEROMP_LOCAL_SOURCE  ;
     strcpy(descrp,"zeromp_local_source");
   }
@@ -1433,7 +1453,9 @@ static int get_quark_source(int *status_p, FILE *fp, int prompt,
   /* Complex field sources */
   if ( source_type == POINT || 
        source_type == ONEMP_0_SOURCE ||
-       source_type == ONEMP_LRHOZ_SOURCE ||
+       source_type == ONEMP_xLOCAL_SOURCE ||
+       source_type == ONEMP_yLOCAL_SOURCE ||
+       source_type == ONEMP_zLOCAL_SOURCE ||
        source_type == ONEMM_xLOCAL_SOURCE ||
        source_type == ONEMM_yLOCAL_SOURCE ||
        source_type == ONEMM_zLOCAL_SOURCE ||

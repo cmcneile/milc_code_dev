@@ -22,4 +22,4 @@ milc_qcd-develop/generic_ks/spectrum_hybrids5_v7.c
 
 
 ../include//generic_quark_types.h:  ONEMP_0_SOURCE,
-../include//generic_quark_types.h:  ONEMP_LRHOZ_SOURCE
+../include//generic_quark_types.h:  ONEMP_zLOCAL_SOURCE
