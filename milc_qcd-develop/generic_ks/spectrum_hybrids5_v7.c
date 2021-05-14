@@ -486,10 +486,6 @@ void mult_1mp0_lrho_field( int pdir, su3_vector *src_in, su3_vector *dest )
 	  dir_a = YUP; dir_b = ZUP;
 	}
         
-     if(this_node==0)printf("pdir = %d not coded up \n" , pdir);
-	terminate(0);	
-      }
-
 
   su3_vector *ttt = create_v_field();
   su3_vector *cg_p = create_v_field();

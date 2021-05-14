@@ -1460,7 +1460,7 @@ static int get_quark_source(int *status_p, FILE *fp, int prompt,
        source_type == ONEMM_yLOCAL_SOURCE ||
        source_type == ONEMM_zLOCAL_SOURCE ||
        source_type == ZEROMP_LOCAL_SOURCE ||
-       source_type == TWOMP_zlOCAL_SOURCE ){
+       source_type == TWOMP_zLOCAL_SOURCE ){
     IF_OK status += get_vi(fp, prompt, "origin", source_loc, 4);
   }
   else if ( source_type == CORNER_WALL ||
