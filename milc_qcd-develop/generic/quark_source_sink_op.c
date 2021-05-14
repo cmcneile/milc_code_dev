@@ -1897,6 +1897,7 @@ void v_field_op(su3_vector *src, quark_source_sink_op *qss_op,
 
   else if(op_type == ASLASH_KS_FILE)
     apply_aslash_v(src, qss_op, t0);
+
   else if(op_type == ONEMP_0_SOURCE)
     {
       //      node0_printf("DEBUG onemp applied to SINK \n") ;                          
@@ -1911,16 +1912,25 @@ void v_field_op(su3_vector *src, quark_source_sink_op *qss_op,
       //      node0_printf("DEBUG onemp applied to SINK \n") ;                          
       mult_1mp0_lrho_field(ZUP, src, src ) ;
 
-      node0_printf("DEBUG epsilon NOT applied to SINK \n") ;
+      //node0_printf("DEBUG epsilon NOT applied to SINK \n") ;
       //      mult_epsilon(src,src) ;                                                   
 
     }
-  else if(op_type == ZEROMP_LOCAL_SOURCE )
+  else if(op_type == ONEMM_xLOCAL_SOURCE )
     {
       //      node0_printf("DEBUG onemp applied to SINK \n") ;                          
-      mult_0mpi_field(src, src ) ;  /** HACK  **/
+      mult_1mm5_field(XUP, src, src ) ;  /*  HACK **/
 
-      node0_printf("DEBUG epsilon NOT applied to SINK \n") ;
+      //node0_printf("DEBUG epsilon NOT applied to SINK \n") ;
+      //      mult_epsilon(src,src) ;                                                   
+
+    }
+  else if(op_type == ONEMM_yLOCAL_SOURCE )
+    {
+      //      node0_printf("DEBUG onemp applied to SINK \n") ;                          
+      mult_1mm5_field(YUP, src, src ) ;  /*  HACK **/
+
+      //node0_printf("DEBUG epsilon NOT applied to SINK \n") ;
       //      mult_epsilon(src,src) ;                                                   
 
     }
@@ -1928,6 +1938,15 @@ void v_field_op(su3_vector *src, quark_source_sink_op *qss_op,
     {
       //      node0_printf("DEBUG onemp applied to SINK \n") ;                          
       mult_1mm5_field(ZUP, src, src ) ;  /*  HACK **/
+
+      //node0_printf("DEBUG epsilon NOT applied to SINK \n") ;
+      //      mult_epsilon(src,src) ;                                                   
+
+    }
+  else if(op_type == ZEROMP_LOCAL_SOURCE )
+    {
+      //      node0_printf("DEBUG onemp applied to SINK \n") ;                          
+      mult_0mpi_field(src, src ) ;  /** HACK  **/
 
       node0_printf("DEBUG epsilon NOT applied to SINK \n") ;
       //      mult_epsilon(src,src) ;                                                   
@@ -2199,6 +2218,14 @@ static int ask_field_op( FILE *fp, int prompt, int *source_type, char *descrp)
     *source_type =  ZEROMP_LOCAL_SOURCE ;
     strcpy(descrp,"zeromp_local_source");
   }
+  else if(strcmp("onemm_xlocal_source",savebuf) == 0 ){
+    *source_type = ONEMM_xLOCAL_SOURCE  ;
+    strcpy(descrp,"onemm_xlocal_source");
+  }
+  else if(strcmp("onemm_ylocal_source",savebuf) == 0 ){
+    *source_type = ONEMM_yLOCAL_SOURCE  ;
+    strcpy(descrp,"ynemm_ylocal_source");
+  }
   else if(strcmp("onemm_zlocal_source",savebuf) == 0 ){
     *source_type = ONEMM_zLOCAL_SOURCE  ;
     strcpy(descrp,"onemm_zlocal_source");
@@ -2408,25 +2435,14 @@ static int get_field_op(int *status_p, FILE *fp,
     /* width: psi=exp(-(r/r0)^2) */
     IF_OK status += get_f(fp, prompt,"r0", &source_r0 );
   }
-  else if ( op_type == IDENTITY ){
-    /* No additional parameters needed */
-  }
-  else if ( op_type == IDENTITY ){
-    /* No additional parameters needed */
-  }
-  else if ( op_type == ONEMP_0_SOURCE  ){
-    /* No additional parameters needed */
-  }
-  else if ( op_type == ONEMP_LRHOZ_SOURCE  ){
-    /* No additional parameters needed */
-  }
-  else if ( op_type == ZEROMP_LOCAL_SOURCE  ){
-    /* No additional parameters needed */
-  }
-  else if ( op_type ==  ONEMM_zLOCAL_SOURCE ){
-    /* No additional parameters needed */
-  }
-  else if ( op_type == TWOMP_zLOCAL_SOURCE  ){
+  else if ( op_type == IDENTITY ||
+            op_type == ONEMP_0_SOURCE ||
+            op_type == ONEMP_LRHOZ_SOURCE ||
+            op_type == ONEMM_xLOCAL_SOURCE ||
+            op_type == ONEMM_yLOCAL_SOURCE ||
+            op_type == ONEMM_zLOCAL_SOURCE ||
+            op_type == ZEROMP_LOCAL_SOURCE ||
+            op_type == TWOMP_zLOCAL_SOURCE ){
     /* No additional parameters needed */
   }
   else if ( op_type == WAVEFUNCTION_FILE ){
