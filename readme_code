@@ -4,10 +4,6 @@ HYBRID CODE
 The spectroscopy code is in ks_spectrum
 make ks_spectrum_hisq
 
-An example of running is in
-ks_spectrum/runs_hybrid/
-go.sh
-
 Changes to the code
 --------------------
 

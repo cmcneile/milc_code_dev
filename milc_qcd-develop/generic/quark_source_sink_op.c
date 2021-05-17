@@ -1900,71 +1900,80 @@ void v_field_op(su3_vector *src, quark_source_sink_op *qss_op,
 
   else if(op_type == ONEMP_0_SOURCE)
     {
-      //      node0_printf("DEBUG onemp applied to SINK \n") ;                          
       mult_1mp0_field(ZUP, src, src ) ;
-
-      //  node0_printf("DEBUG epsilon applied to SINK \n") ;                            
       mult_epsilon(src,src) ;
 
     }
   else if(op_type == ONEMP_xLOCAL_SOURCE)
     {
-      //      node0_printf("DEBUG onemp applied to SINK \n") ;                          
-      mult_1mp0_lrho_field(XUP, src, src ) ;
-
-      //node0_printf("DEBUG epsilon NOT applied to SINK \n") ;
-      //      mult_epsilon(src,src) ;                                                   
-
+      mult_1mpi_field(XUP, src, src ) ;
     }
   else if(op_type == ONEMP_yLOCAL_SOURCE)
     {
-      //      node0_printf("DEBUG onemp applied to SINK \n") ;                          
-      mult_1mp0_lrho_field(YUP, src, src ) ;
-
-      //node0_printf("DEBUG epsilon NOT applied to SINK \n") ;
-      //      mult_epsilon(src,src) ;                                                   
-
+      mult_1mpi_field(YUP, src, src ) ;
     }
  else if(op_type == ONEMP_zLOCAL_SOURCE)
     {
-      //      node0_printf("DEBUG onemp applied to SINK \n") ;                          
-      mult_1mp0_lrho_field(ZUP, src, src ) ;
-
-      //node0_printf("DEBUG epsilon NOT applied to SINK \n") ;
-      //      mult_epsilon(src,src) ;                                                   
-
+      mult_1mpi_field(ZUP, src, src ) ;
+    }
+ else if(op_type == ONEMPE_xLOCAL_SOURCE)
+    {
+      mult_1mpE_field(XUP, src, src ) ;
+    }
+ else if(op_type == ONEMPE_yLOCAL_SOURCE)
+    {
+      mult_1mpE_field(YUP, src, src ) ;
+    }
+ else if(op_type == ONEMPE_zLOCAL_SOURCE)
+    {
+      mult_1mpE_field(ZUP, src, src ) ;
     }
  else if(op_type == ONEMM_xLOCAL_SOURCE )
     {
-      //      node0_printf("DEBUG onemp applied to SINK \n") ;                          
       mult_1mm5_field(XUP, src, src ) ;  /*  HACK **/
-
-      //node0_printf("DEBUG epsilon NOT applied to SINK \n") ;
-      //      mult_epsilon(src,src) ;                                                   
-
     }
-  else if(op_type == ONEMM_yLOCAL_SOURCE )
+ else if(op_type == ONEMM_yLOCAL_SOURCE )
     {
-      //      node0_printf("DEBUG onemp applied to SINK \n") ;                          
       mult_1mm5_field(YUP, src, src ) ;  /*  HACK **/
-
-      //node0_printf("DEBUG epsilon NOT applied to SINK \n") ;
-      //      mult_epsilon(src,src) ;                                                   
-
     }
   else if(op_type == ONEMM_zLOCAL_SOURCE )
     {
-      //      node0_printf("DEBUG onemp applied to SINK \n") ;                          
       mult_1mm5_field(ZUP, src, src ) ;  /*  HACK **/
-
-      //node0_printf("DEBUG epsilon NOT applied to SINK \n") ;
-      //      mult_epsilon(src,src) ;                                                   
-
     }
-  else if(op_type == ZEROMP_LOCAL_SOURCE )
+  else if(op_type == ONEMME_xLOCAL_SOURCE )
+    {
+      mult_1mmE_field(XUP, src, src ) ;  /*  HACK **/
+    }
+  else if(op_type == ONEMME_yLOCAL_SOURCE )
+    {
+      mult_1mmE_field(YUP, src, src ) ;  /*  HACK **/
+    }
+ else if(op_type == ONEMME_zLOCAL_SOURCE )
+    {
+      mult_1mmE_field(ZUP, src, src ) ;  /*  HACK **/
+    }
+ else if(op_type == ZEROMP_LOCAL_SOURCE )
     {
       //      node0_printf("DEBUG onemp applied to SINK \n") ;                          
       mult_0mpi_field(src, src ) ;  /** HACK  **/
+
+      node0_printf("DEBUG epsilon NOT applied to SINK \n") ;
+      //      mult_epsilon(src,src) ;                                                   
+
+    }
+  else if(op_type ==  TWOMP_xLOCAL_SOURCE )
+    {
+      //      node0_printf("DEBUG onemp applied to SINK \n") ;                          
+      mult_2mpi_field(XUP, src, src ) ; /*  HACK */
+
+      node0_printf("DEBUG epsilon NOT applied to SINK \n") ;
+      //      mult_epsilon(src,src) ;                                                   
+
+    }
+  else if(op_type ==  TWOMP_yLOCAL_SOURCE )
+    {
+      //      node0_printf("DEBUG onemp applied to SINK \n") ;                          
+      mult_2mpi_field(YUP, src, src ) ; /*  HACK */
 
       node0_printf("DEBUG epsilon NOT applied to SINK \n") ;
       //      mult_epsilon(src,src) ;                                                   
@@ -2240,21 +2249,53 @@ static int ask_field_op( FILE *fp, int prompt, int *source_type, char *descrp)
     *source_type = ONEMP_zLOCAL_SOURCE ;
     strcpy(descrp,"onemp_zlocal_source");
   }
-  else if(strcmp("zeromp_local_source",savebuf) == 0 ){
+  else if(strcmp("onempE_xlocal_source",savebuf) == 0 ){
+    *source_type = ONEMPE_xLOCAL_SOURCE ;
+    strcpy(descrp,"onempE_xlocal_source");
+  }
+  else if(strcmp("onempE_ylocal_source",savebuf) == 0 ){
+    *source_type = ONEMPE_yLOCAL_SOURCE ;
+    strcpy(descrp,"onempE_ylocal_source");
+  }
+  else if(strcmp("onempE_zlocal_source",savebuf) == 0 ){
+    *source_type = ONEMPE_zLOCAL_SOURCE ;
+    strcpy(descrp,"onempE_zlocal_source");
+  }
+ else if(strcmp("zeromp_local_source",savebuf) == 0 ){
     *source_type = ZEROMP_LOCAL_SOURCE ;
     strcpy(descrp,"zeromp_local_source");
   }
-  else if(strcmp("onemm_xlocal_source",savebuf) == 0 ){
+ else if(strcmp("onemm_xlocal_source",savebuf) == 0 ){
     *source_type = ONEMM_xLOCAL_SOURCE  ;
     strcpy(descrp,"onemm_xlocal_source");
   }
-  else if(strcmp("onemm_ylocal_source",savebuf) == 0 ){
+ else if(strcmp("onemm_ylocal_source",savebuf) == 0 ){
     *source_type = ONEMM_yLOCAL_SOURCE  ;
     strcpy(descrp,"ynemm_ylocal_source");
   }
-  else if(strcmp("onemm_zlocal_source",savebuf) == 0 ){
+ else if(strcmp("onemm_zlocal_source",savebuf) == 0 ){
     *source_type = ONEMM_zLOCAL_SOURCE  ;
     strcpy(descrp,"onemm_zlocal_source");
+  }
+ else if(strcmp("onemmE_xlocal_source",savebuf) == 0 ){
+    *source_type = ONEMME_xLOCAL_SOURCE  ;
+    strcpy(descrp,"onemmE_xlocal_source");
+  }
+ else if(strcmp("onemmE_ylocal_source",savebuf) == 0 ){
+    *source_type = ONEMME_yLOCAL_SOURCE  ;
+    strcpy(descrp,"onemmE_ylocal_source");
+  }
+ else if(strcmp("onemmE_zlocal_source",savebuf) == 0 ){
+    *source_type = ONEMME_zLOCAL_SOURCE  ;
+    strcpy(descrp,"onemmE_zlocal_source");
+  }
+ else if(strcmp("twomp_xlocal_source",savebuf) == 0 ){
+    *source_type = TWOMP_xLOCAL_SOURCE  ;
+    strcpy(descrp,"twomp_xlocal_source");
+  }
+  else if(strcmp("twomp_ylocal_source",savebuf) == 0 ){
+    *source_type = TWOMP_yLOCAL_SOURCE  ;
+    strcpy(descrp,"twomp_ylocal_source");
   }
   else if(strcmp("twomp_zlocal_source",savebuf) == 0 ){
     *source_type = TWOMP_zLOCAL_SOURCE  ;
@@ -2463,13 +2504,21 @@ static int get_field_op(int *status_p, FILE *fp,
   }
   else if ( op_type == IDENTITY ||
             op_type == ONEMP_0_SOURCE ||
-            op_type == ONEMP_xLOCAL_SOURCE ||
+	    op_type == ONEMP_xLOCAL_SOURCE ||
 	    op_type == ONEMP_yLOCAL_SOURCE ||
-	    op_type == ONEMP_zLOCAL_SOURCE ||
+            op_type == ONEMP_zLOCAL_SOURCE ||
+            op_type == ONEMPE_xLOCAL_SOURCE ||
+            op_type == ONEMPE_yLOCAL_SOURCE ||
+            op_type == ONEMPE_zLOCAL_SOURCE ||
             op_type == ONEMM_xLOCAL_SOURCE ||
             op_type == ONEMM_yLOCAL_SOURCE ||
             op_type == ONEMM_zLOCAL_SOURCE ||
+            op_type == ONEMME_xLOCAL_SOURCE ||
+            op_type == ONEMME_yLOCAL_SOURCE ||
+            op_type == ONEMME_zLOCAL_SOURCE ||
             op_type == ZEROMP_LOCAL_SOURCE ||
+            op_type == TWOMP_xLOCAL_SOURCE ||
+            op_type == TWOMP_yLOCAL_SOURCE ||
             op_type == TWOMP_zLOCAL_SOURCE ){
     /* No additional parameters needed */
   }

@@ -682,10 +682,18 @@ int is_vector_source(int source_type){
     source_type == ONEMP_xLOCAL_SOURCE ||
     source_type == ONEMP_yLOCAL_SOURCE ||
     source_type == ONEMP_zLOCAL_SOURCE ||
+    source_type == ONEMPE_xLOCAL_SOURCE ||
+    source_type == ONEMPE_yLOCAL_SOURCE ||
+    source_type == ONEMPE_zLOCAL_SOURCE ||
     source_type == ONEMM_xLOCAL_SOURCE ||
     source_type == ONEMM_yLOCAL_SOURCE ||
     source_type == ONEMM_zLOCAL_SOURCE ||
+    source_type == ONEMME_xLOCAL_SOURCE ||
+    source_type == ONEMME_yLOCAL_SOURCE ||
+    source_type == ONEMME_zLOCAL_SOURCE ||
     source_type == ZEROMP_LOCAL_SOURCE ||
+    source_type == TWOMP_xLOCAL_SOURCE ||
+    source_type == TWOMP_yLOCAL_SOURCE ||
     source_type == TWOMP_zLOCAL_SOURCE ||
     source_type == VECTOR_FIELD_STORE;
 }
@@ -724,17 +732,32 @@ static int get_vector_source(quark_source *qs){
   else if(source_type == ONEMP_xLOCAL_SOURCE) {
     random_color_wall(qs->v_src, t0);
     init_hybrids() ; /**  needs to be only done once  ***/
-    mult_1mp0_lrho_field(XUP, qs->v_src,qs->v_src ) ;
+    mult_1mpi_field(XUP, qs->v_src,qs->v_src ) ;
   }
   else if(source_type == ONEMP_yLOCAL_SOURCE) {
     random_color_wall(qs->v_src, t0);
     init_hybrids() ; /**  needs to be only done once  ***/
-    mult_1mp0_lrho_field(YUP, qs->v_src,qs->v_src ) ;
+    mult_1mpi_field(YUP, qs->v_src,qs->v_src ) ;
   }
   else if(source_type == ONEMP_zLOCAL_SOURCE) {
     random_color_wall(qs->v_src, t0);
     init_hybrids() ; /**  needs to be only done once  ***/
-    mult_1mp0_lrho_field(ZUP, qs->v_src,qs->v_src ) ;
+    mult_1mpi_field(ZUP, qs->v_src,qs->v_src ) ;
+  }
+  else if(source_type == ONEMPE_xLOCAL_SOURCE) {
+    random_color_wall(qs->v_src, t0);
+    init_hybrids() ; /**  needs to be only done once  ***/
+    mult_1mpE_field(XUP, qs->v_src,qs->v_src ) ;
+  }
+  else if(source_type == ONEMPE_yLOCAL_SOURCE) {
+    random_color_wall(qs->v_src, t0);
+    init_hybrids() ; /**  needs to be only done once  ***/
+    mult_1mpE_field(YUP, qs->v_src,qs->v_src ) ;
+  }
+  else if(source_type == ONEMPE_zLOCAL_SOURCE) {
+    random_color_wall(qs->v_src, t0);
+    init_hybrids() ; /**  needs to be only done once  ***/
+    mult_1mpE_field(ZUP, qs->v_src,qs->v_src ) ;
   }
   else if(source_type == ONEMM_xLOCAL_SOURCE) {
     random_color_wall(qs->v_src, t0);
@@ -751,10 +774,35 @@ static int get_vector_source(quark_source *qs){
     init_hybrids() ; /**  needs to be only done once  ***/
     mult_1mm5_field(ZUP, qs->v_src,qs->v_src ) ; /* HACK **/
   }
+  else if(source_type == ONEMME_xLOCAL_SOURCE) {
+    random_color_wall(qs->v_src, t0);
+    init_hybrids() ; /**  needs to be only done once  ***/
+    mult_1mmE_field(XUP, qs->v_src,qs->v_src ) ; /* HACK **/
+  }
+  else if(source_type == ONEMME_yLOCAL_SOURCE) {
+    random_color_wall(qs->v_src, t0);
+    init_hybrids() ; /**  needs to be only done once  ***/
+    mult_1mmE_field(YUP, qs->v_src,qs->v_src ) ; /* HACK **/
+  }
+  else if(source_type == ONEMME_zLOCAL_SOURCE) {
+    random_color_wall(qs->v_src, t0);
+    init_hybrids() ; /**  needs to be only done once  ***/
+    mult_1mmE_field(ZUP, qs->v_src,qs->v_src ) ; /* HACK **/
+  }
   else if(source_type == ZEROMP_LOCAL_SOURCE ) {
     random_color_wall(qs->v_src, t0);
     init_hybrids() ; /**  needs to be only done once  ***/
     mult_0mpi_field(qs->v_src,qs->v_src ) ; /* HACK **/
+  }
+  else if(source_type == TWOMP_xLOCAL_SOURCE ) {
+    random_color_wall(qs->v_src, t0);
+    init_hybrids() ; /**  needs to be only done once  ***/
+    mult_2mpi_field(XUP, qs->v_src,qs->v_src ) ; /* HACK **/
+  }
+  else if(source_type == TWOMP_yLOCAL_SOURCE ) {
+    random_color_wall(qs->v_src, t0);
+    init_hybrids() ; /**  needs to be only done once  ***/
+    mult_2mpi_field(YUP, qs->v_src,qs->v_src ) ; /* HACK **/
   }
   else if(source_type == TWOMP_zLOCAL_SOURCE ) {
     random_color_wall(qs->v_src, t0);
@@ -1314,7 +1362,19 @@ static int ask_quark_source( FILE *fp, int prompt, int *source_type,
     *source_type = ONEMP_zLOCAL_SOURCE  ;
     strcpy(descrp,"onemp_zlocal_source");
   }
- else if(strcmp("zeromp_local_source",savebuf) == 0 ){
+ else if(strcmp("onempE_xlocal_source",savebuf) == 0 ){
+    *source_type = ONEMPE_xLOCAL_SOURCE  ;
+    strcpy(descrp,"onempE_xlocal_source");
+  }
+ else if(strcmp("onempE_ylocal_source",savebuf) == 0 ){
+    *source_type = ONEMPE_yLOCAL_SOURCE  ;
+    strcpy(descrp,"onempE_ylocal_source");
+  }
+ else if(strcmp("onempE_zlocal_source",savebuf) == 0 ){
+    *source_type = ONEMPE_zLOCAL_SOURCE  ;
+    strcpy(descrp,"onempE_zlocal_source");
+  }
+else if(strcmp("zeromp_local_source",savebuf) == 0 ){
     *source_type = ZEROMP_LOCAL_SOURCE  ;
     strcpy(descrp,"zeromp_local_source");
   }
@@ -1329,6 +1389,26 @@ static int ask_quark_source( FILE *fp, int prompt, int *source_type,
   else if(strcmp("onemm_zlocal_source",savebuf) == 0 ){
     *source_type = ONEMM_zLOCAL_SOURCE  ;
     strcpy(descrp,"onemm_zlocal_source");
+  }
+  else if(strcmp("onemmE_xlocal_source",savebuf) == 0 ){
+    *source_type = ONEMME_xLOCAL_SOURCE  ;
+    strcpy(descrp,"onemmE_xlocal_source");
+  }
+ else if(strcmp("onemmE_ylocal_source",savebuf) == 0 ){
+    *source_type = ONEMME_yLOCAL_SOURCE  ;
+    strcpy(descrp,"onemmE_ylocal_source");
+  }
+ else if(strcmp("onemmE_zlocal_source",savebuf) == 0 ){
+    *source_type = ONEMME_zLOCAL_SOURCE  ;
+    strcpy(descrp,"onemmE_zlocal_source");
+  }
+ else if(strcmp("twomp_xlocal_source",savebuf) == 0 ){
+    *source_type = TWOMP_xLOCAL_SOURCE  ;
+    strcpy(descrp,"twomp_xlocal_source");
+  }
+  else if(strcmp("twomp_ylocal_source",savebuf) == 0 ){
+    *source_type = TWOMP_yLOCAL_SOURCE  ;
+    strcpy(descrp,"twomp_ylocal_source");
   }
   else if(strcmp("twomp_zlocal_source",savebuf) == 0 ){
     *source_type = TWOMP_zLOCAL_SOURCE  ;
@@ -1456,10 +1536,18 @@ static int get_quark_source(int *status_p, FILE *fp, int prompt,
        source_type == ONEMP_xLOCAL_SOURCE ||
        source_type == ONEMP_yLOCAL_SOURCE ||
        source_type == ONEMP_zLOCAL_SOURCE ||
+       source_type == ONEMPE_xLOCAL_SOURCE ||
+       source_type == ONEMPE_yLOCAL_SOURCE ||
+       source_type == ONEMPE_zLOCAL_SOURCE ||
        source_type == ONEMM_xLOCAL_SOURCE ||
        source_type == ONEMM_yLOCAL_SOURCE ||
        source_type == ONEMM_zLOCAL_SOURCE ||
+       source_type == ONEMME_xLOCAL_SOURCE ||
+       source_type == ONEMME_yLOCAL_SOURCE ||
+       source_type == ONEMME_zLOCAL_SOURCE ||
        source_type == ZEROMP_LOCAL_SOURCE ||
+       source_type == TWOMP_xLOCAL_SOURCE ||
+       source_type == TWOMP_yLOCAL_SOURCE ||
        source_type == TWOMP_zLOCAL_SOURCE ){
     IF_OK status += get_vi(fp, prompt, "origin", source_loc, 4);
   }

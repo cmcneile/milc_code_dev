@@ -110,9 +110,8 @@ void mult_by_field_strength( int dir1, int dir2,
 
     /* multiply by matrix */
     FORALLSITES(i,s){
-	mult_su3_mat_vec( &(s->field_strength[fs_dir]), 
-	    src+i, &tvec );
-	scalar_mult_su3_vector( &tvec, sign, dest + i  );
+	mult_su3_mat_vec( &(s->field_strength[fs_dir]), src+i, &tvec );
+	scalar_mult_su3_vector( &tvec, sign, dest + i );
     }
 }
 
@@ -129,8 +128,7 @@ void su3mat_dump(int dir, int ii,  su3_matrix *a, su3_matrix *b ){
 register int i,j;
     for(i=0;i<3;i++)
       for(j=0;j<3;j++)
-	{
-	  printf("dir = %d, ii = %d colour%d %d ", dir, ii, i , j) ;
+	{	  printf("dir = %d, ii = %d colour%d %d ", dir, ii, i , j) ;
 	  printf("a_re - b_re = %f \n", a->e[i][j].real - b->e[i][j].real) ;
 	
 	  //	b->e[i][j].imag = a->e[i][j].imag;
@@ -322,7 +320,7 @@ void mult_rho0_field_all( int fdir, su3_vector *src,  su3_vector *dest )
 }
 
 /***
-  Multiply by epsilon = (-1)**(x+y+z+yt)
+  Multiply by epsilon = (-1)**(x+y+z+t)
 
  **/
 
@@ -342,10 +340,6 @@ void mult_epsilon(su3_vector *src,  su3_vector *dest )
 }
 
 
-
-
-
-
 /* "Multiply by" a one-minus-plus operator 
     quark operator is "rho0", gluon operator is magnetic field B.
     Cross product is spin one.
@@ -357,16 +351,6 @@ void mult_1mp0_field( int pdir, su3_vector *src_in, su3_vector *dest )
 {
   char debug[][4] = {"XUP", "YUP", "ZUP", "TUP"  };
 
-#if 0
-  node0_printf("DEBUG tup %d %s\n", TUP, debug[TUP] );
-  node0_printf("DEBUG xup %d %s\n", XUP, debug[XUP] );
-  node0_printf("DEBUG yup %d %s\n", YUP, debug[YUP] );
-  node0_printf("DEBUG zup %d %s\n", ZUP, debug[ZUP] );
-
-  node0_printf("DEBUG pdir = %s\n", debug[pdir] );
-#endif
-
-    /* use cg_p and ttt as temporary storage */
     register int dir,i;
     register site *s;
 
@@ -381,24 +365,13 @@ void mult_1mp0_field( int pdir, su3_vector *src_in, su3_vector *dest )
 
   su3_vector *ttt = create_v_field();
   su3_vector *cg_p = create_v_field();
-
   su3_vector *src = create_v_field();
 
-#if 1 
   /** copy source so src_in and dfest can be the same ***/
   copy_v_field(src, src_in);
 
   /* set destination to zero */
-  FORALLSITES(i,s){
-    clearvec( dest + i );
-  }
-#endif
-
-#if 0 
-  rephase(OFF);
-  mult_rho0_field_all( ZUP, src, dest );  // craig hack
-   rephase(ON);
-#endif
+  FORALLSITES(i,s){ clearvec( dest + i ); }
 
   /* Loop over spatial directions orthogonal to pdir */
   for(dir=XUP; dir<=ZUP ; dir++)
@@ -408,174 +381,27 @@ void mult_1mp0_field( int pdir, su3_vector *src_in, su3_vector *dest )
 	   multiply by flavor gamma_0 rho (includes gamma_5 for antiquark
 	   propagator) */
 
-	/**     **/
-	//	node0_printf("Field_strength [%3s,%3s] rho0[%3s]\n", debug[dir],debug[pdir], debug[dir] );
-
-
 	 mult_by_field_strength( dir, pdir, src, cg_p );
 	 mult_rho0_field_all( dir, cg_p, ttt );
+         FORALLSITES(i,s){ add_su3_vector( dest + i,  ttt + i , dest + i ) ; }
 
-	FORALLSITES(i,s){
-	  add_su3_vector( dest + i,  ttt + i , dest + i ) ;
-	}
-
-        /**    **/
-	mult_rho0_field_all( dir, src, cg_p );
+	 mult_rho0_field_all( dir, src, cg_p );
 	 mult_by_field_strength( dir, pdir,cg_p, ttt  );
-
-
-	FORALLSITES(i,s){
-	  add_su3_vector( dest + i, ttt + i , dest + i ) ;
-	}
-
+	 FORALLSITES(i,s){ add_su3_vector( dest + i, ttt + i , dest + i ) ; }
       } /* end loop on dir */
     }
-
 
   destroy_v_field(ttt);
   destroy_v_field(cg_p);
   destroy_v_field(src);
-
 
 } /* end mult_1mp0_field */
 
 
 
-/* Use local rho meson operator
-
-    "Multiply by" a one-minus-plus operator 
-    quark operator is "rho0", gluon operator is magnetic field B.
-    Cross product is spin one.
-    Z component = "rho_X*F_XZ + rho_Y*F_YZ.rho0
-   "pdir" is the polarization direction of the meson */
-void mult_1mp0_lrho_field( int pdir, su3_vector *src_in, su3_vector *dest )
-{
-  char debug[][4] = {"XUP", "YUP", "ZUP", "TUP"  };
-
-#if 0
-  node0_printf("DEBUG tup %d %s\n", TUP, debug[TUP] );
-  node0_printf("DEBUG xup %d %s\n", XUP, debug[XUP] );
-  node0_printf("DEBUG yup %d %s\n", YUP, debug[YUP] );
-  node0_printf("DEBUG zup %d %s\n", ZUP, debug[ZUP] );
-  node0_printf("DEBUG pdir = %s\n", debug[pdir] );
-#endif
-
-    /* use cg_p and ttt as temporary storage */
-    register int dir,i;
-    register site *s;
-    int dir_a , dir_b ; 
-
-    static int do_init = 1 ;
-
-    if( do_init )
-      {
-	int dummy = init_hybrids() ;
-	do_init = 0 ;
-      }
-
-    if ( pdir == ZUP )
-  	{
-	  dir_a = XUP ; dir_b = YUP ;
-      	}
-    else if( pdir == YUP )
-	{ 
-	  dir_a = XUP; dir_b = ZUP;
-	}
-    else if( pdir == XUP )
-	{
-	  dir_a = YUP; dir_b = ZUP;
-	}
-        
-
-  su3_vector *ttt = create_v_field();
-  su3_vector *cg_p = create_v_field();
-
-  su3_vector *src = create_v_field();
-
-  int r0[4] = { 0 , 0 ,0 , 0 }  ;
-
-  /** copy source so src_in and dfest can be the same ***/
-  copy_v_field(src, src_in);
-
-  /* set destination to zero */
-  FORALLSITES(i,s){
-    clearvec( dest + i );
-  }
-
-  mult_by_field_strength( dir_a, pdir, src, cg_p );
-  // Apply the local rho operator
-  mult_rhoi_field(dir_a, r0, cg_p, ttt ) ;
-  FORALLSITES(i,s){
-    add_su3_vector( dest + i,  ttt + i , dest + i ) ;
-  }
-
-  mult_by_field_strength( dir_b, pdir, src, cg_p );
-  // Apply the local rho operator
-  mult_rhoi_field(dir_b, r0, cg_p, ttt ) ;
-  FORALLSITES(i,s){
-    sub_su3_vector( dest + i,  ttt + i , dest + i ) ;
-  }
-
-
-
-  destroy_v_field(ttt);
-  destroy_v_field(cg_p);
-  destroy_v_field(src);
-
-
-} /* end mult_1mp0_lrho_field */
-
-
-
-
-
-
-//##############################################################################
-/* "Multiply by" a one-minus-minus hybrid operator 
-    quark operator is "pion5"(ie do nothing), gluon operator is magnetic field.
-    1--: \psi-bar gamma_5 B_i \psi
-   "pdir" is the polarization direction of the meson */
-void mult_1mm5_field( int pdir, su3_vector *src_in, su3_vector *dest ){
-
-  char debug[][4] = { "XUP", "YUP", "ZUP", "TUP" };
-
-  register int dir,i;
-  register site *s;
-
-  static int do_init = 1 ;
-  if( do_init )
-    {
-	int dummy = init_hybrids() ;
-	do_init = 0 ;
-    }
-
-  su3_vector *cg_p = create_v_field();
-  su3_vector *src = create_v_field();
-
-  /** copy source so src_in and dest can be the same ***/
-  copy_v_field(src, src_in);
-
-  /* set destination to zero */
-  FORALLSITES(i,s){ clearvec( dest + i ); }
-
-  mult_by_field_strength( (pdir+1)%3, (pdir+2)%3, src, cg_p );
-  
-  FORALLSITES(i,s){
-    add_su3_vector( dest + i,  cg_p + i , dest + i ) ;
-  }
-
-  destroy_v_field(cg_p);
-  destroy_v_field(src);
-
-} /* end mult_1mm5_field */
-
-
-
 //##############################################################################
 /* "Multiply by" a one-minus-plus operator 
-    quark operator is "rho0", gluon operator is magnetic field B.
-    Cross product is spin one.
-    Z component = "rho_X*F_XZ + rho_Y*F_YZ.
+    quark operator is the local "rhoi", gluon operator is chromomagnetic field B.
    "pdir" is the polarization direction of the meson */
 void mult_1mpi_field( int pdir, su3_vector *src_in, su3_vector *dest )
 {
@@ -601,10 +427,6 @@ void mult_1mpi_field( int pdir, su3_vector *src_in, su3_vector *dest )
       break;
     case ZUP:
       dir_a = XUP; dir_b = YUP;
-      break;
-    default:
-      if(this_node==0)printf("pdir = %d not coded up \n" , pdir);
-      terminate(0);
   }
 
   /* use cg_p and ttt as temporary storage */
@@ -639,7 +461,111 @@ void mult_1mpi_field( int pdir, su3_vector *src_in, su3_vector *dest )
   destroy_v_field(src);
 
 } /* end mult_1mpi_field */
+//############################################################################
+// chromo-electric field now
+void mult_1mpE_field( int pdir, su3_vector *src_in, su3_vector *dest )
+{
+  char debug[][4] = {"XUP", "YUP", "ZUP", "TUP"  };
 
+  register int dir,i;
+  register site *s;
+
+  static int do_init = 1 ;
+  if( do_init ){
+    int dummy = init_hybrids() ;
+    do_init = 0 ;
+  }
+
+  /* temporary storage */
+  su3_vector *cg_p = create_v_field();
+  su3_vector *src = create_v_field();
+
+  int r0[4] = { 0 , 0 ,0 , 0 }  ;
+
+  /** copy source so src_in and dest can be the same ***/
+  copy_v_field(src, src_in);
+
+  /* set destination to zero */
+  FORALLSITES(i,s){ clearvec( dest + i ); }
+ 
+  /* Multiply by pdir component of chromoelectric field. */
+  mult_by_field_strength( TUP, pdir, src, cg_p );
+  FORALLSITES(i,s){
+	if( (s->t & 0x1) == 0 ){
+            add_su3_vector(dest + i, cg_p + i, dest + i); } 
+	else {
+            scalar_mult_su3_vector( cg_p + i, -1.0, dest + i );}
+	}
+
+  destroy_v_field(cg_p);
+  destroy_v_field(src);
+
+} /* end mult_1mpE_field */
+
+//##############################################################################
+/* "Multiply by" a one-minus-minus hybrid operator 
+    quark operator is "pion5"(ie do nothing), gluon operator is magnetic field.
+    1--: \psi-bar gamma_5 B_i \psi
+   "pdir" is the polarization direction of the meson */
+void mult_1mm5_field( int pdir, su3_vector *src_in, su3_vector *dest ){
+
+  char debug[][4] = { "XUP", "YUP", "ZUP", "TUP" };
+
+  register int dir,i;
+  register site *s;
+  su3_vector *src = create_v_field();
+
+  static int do_init = 1 ;
+  if( do_init )
+    {
+	int dummy = init_hybrids() ;
+	do_init = 0 ;
+    }
+
+  /** copy source so src_in and dest can be the same ***/
+  copy_v_field(src, src_in);
+
+  /* set destination to zero  - is this necessary ? */
+  FORALLSITES(i,s){ clearvec( dest + i ); }
+
+  mult_by_field_strength( (pdir+1)%3, (pdir+2)%3, src, dest );
+} /* end mult_1mm5_field */
+
+// ##################################################
+// chromo-electric field now
+void mult_1mmE_field( int pdir, su3_vector *src_in, su3_vector *dest ){
+
+  char debug[][4] = { "XUP", "YUP", "ZUP", "TUP" };
+
+  register int dir,i;
+  register site *s;
+
+  /* temporary storage */
+  su3_vector *cg_p = create_v_field();
+  su3_vector *src = create_v_field();
+
+
+  static int do_init = 1 ;
+  if( do_init )
+    {
+	int dummy = init_hybrids() ;
+	do_init = 0 ;
+    }
+
+  /** copy source so src_in and dest can be the same ***/
+  copy_v_field(src, src_in);
+
+  /* set destination to zero  - is this necessary ? */
+  FORALLSITES(i,s){ clearvec( dest + i ); }
+
+  mult_by_field_strength( (pdir+1)%3, (pdir+2)%3, src, dest );
+  FORALLSITES(i,s){
+	if( (s->x + s->y + s->z) == 0 ){
+            add_su3_vector(dest + i, cg_p + i, dest + i); } 
+	else {
+            scalar_mult_su3_vector( cg_p + i, -1.0, dest + i );}
+	}
+} /* END 1mmE */
 
 
 //##########################################################################
@@ -674,27 +600,13 @@ void mult_0mpi_field( su3_vector *src_in, su3_vector *dest ){
     clearvec( dest + i );
   }
 
-  /* Loop over spatial directions */
-/*  for(dir=XUP; dir<=ZUP ; dir++){
-         mult_by_field_strength( (dir+1)%3, (dir+2)%3, src, cg_p ); 
-	 mult_rhoi_field(dir, r0, cg_p, ttt ) ;
+for(i=XUP;i<=ZUP;i++){
+	int j=(i+1)%3; int k=(i+2)%3;
 
-	 FORALLSITES(i,s){
-	  add_su3_vector( dest + i,  ttt + i , dest + i ) ;
+	mult_by_field_strength( j, k, src, cg_p ); 
+	mult_rhoi_field( i, r0, cg_p, ttt ) ;
+	FORALLSITES(i,s){add_su3_vector( dest + i,  ttt + i , dest + i ) ;}
 	}
-  }*/
- 
-mult_by_field_strength( YUP, ZUP, src, cg_p ); 
-mult_rhoi_field( XUP, r0, cg_p, ttt ) ;
-FORALLSITES(i,s){add_su3_vector( dest + i,  ttt + i , dest + i ) ;}
-
-mult_by_field_strength( XUP, ZUP, src, cg_p ); 
-mult_rhoi_field(YUP, r0, cg_p, ttt ) ;
-FORALLSITES(i,s){ add_su3_vector( dest + i,  ttt + i , dest + i ) ;}
-
-mult_by_field_strength( XUP, YUP, src, cg_p ); 
-mult_rhoi_field(ZUP, r0, cg_p, ttt ) ;
-FORALLSITES(i,s){ add_su3_vector( dest + i,  ttt + i , dest + i ) ;}
 
   destroy_v_field(ttt);
   destroy_v_field(cg_p);
@@ -733,10 +645,6 @@ void mult_2mpi_field( int pdir, su3_vector *src_in, su3_vector *dest ){
       break;
     case ZUP:
       dir_a = XUP; dir_b = YUP;
-      break;
-    default:
-      if(this_node==0)printf("pdir = %d not coded up \n" , pdir);
-      terminate(0);
   }
 
 
@@ -772,15 +680,4 @@ void mult_2mpi_field( int pdir, su3_vector *src_in, su3_vector *dest ){
   destroy_v_field(src);
 
 } /* end mult_2mpi_field */
-
-
-#if 0
-  node0_printf("DEBUG tup %d %s\n", TUP, debug[TUP] );
-  node0_printf("DEBUG xup %d %s\n", XUP, debug[XUP] );
-  node0_printf("DEBUG yup %d %s\n", YUP, debug[YUP] );
-  node0_printf("DEBUG zup %d %s\n", ZUP, debug[ZUP] );
-
-  node0_printf("DEBUG pdir = %s\n", debug[pdir] );
-#endif
-
 
