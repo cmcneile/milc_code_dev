@@ -275,7 +275,12 @@ static void insert_c_mom(complex *c, int mom[3],
 void mult_1mm5_field( int pdir, su3_vector *src_in, su3_vector *dest ) ;
 void mult_0mpi_field( su3_vector *src_in, su3_vector *dest ) ;
 void mult_2mpi_field( int pdir, su3_vector *src_in, su3_vector *dest ) ;
+void mult_1mp0_field( int pdir, su3_vector *src_in, su3_vector *dest )  ;
+void mult_1mpi_field( int pdir, su3_vector *src_in, su3_vector *dest );
+void mult_1mpE_field( int pdir, su3_vector *src_in, su3_vector *dest );
+void mult_1mmE_field( int pdir, su3_vector *src_in, su3_vector *dest );
 
+int init_hybrids() ;
 
 static void insert_v_mom(su3_vector *v, int mom[3], 
 			 int x0, int y0, int z0, int t0){
@@ -299,11 +304,6 @@ static void insert_v_mom(su3_vector *v, int mom[3],
     }
   }
 }
-
-void mult_1mp0_field( int pdir, su3_vector *src, su3_vector *dest )  ;
-void mult_1mp0_lrho_field( int pdir, su3_vector *src_in, su3_vector *dest );
-
-int init_hybrids() ;
 
 #endif
 

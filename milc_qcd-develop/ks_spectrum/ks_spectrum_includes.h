@@ -34,8 +34,6 @@
 #endif
 
 /* prototypes for functions in high level code */
-int setup(void);
-int readin(int prompt);
 int num_mes_report(void);
 
 /* ksprop_info.c */
@@ -68,6 +66,7 @@ ks_prop_field *reread_ksprop_to_ksp_field(int saveflag, char savefile[], int nc)
 /* setup.c */
 int setup(void);
 int readin(int prompt);
+int init_hybrids() ; // hack - regenerate field strength tensor, in control.c too
 
 /* spectrum_ks.c */
 

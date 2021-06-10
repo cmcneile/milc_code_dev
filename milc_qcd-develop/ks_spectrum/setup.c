@@ -1289,6 +1289,7 @@ int readin(int prompt) {
   rephase( OFF );
   ape_links = ape_smear_4D( param.staple_weight, param.ape_iter );
   if(param.time_bc == 0)apply_apbc( ape_links, param.coord_origin[3] );
+  init_hybrids(); // hack - field strength needs to be regenerated, see control.c aswell
   rephase( ON );
 
 #if EIGMODE == EIGCG

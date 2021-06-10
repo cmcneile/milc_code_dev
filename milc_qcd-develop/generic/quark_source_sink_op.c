@@ -258,6 +258,10 @@ void insert_qss_eps_naik_index(int index, quark_source_sink_op *qss_op){
 
 void mult_0mpi_field( su3_vector *src_in, su3_vector *dest ) ;
 void mult_1mm5_field( int pdir, su3_vector *src_in, su3_vector *dest ) ;
+void mult_1mmE_field( int pdir, su3_vector *src_in, su3_vector *dest ) ;
+void mult_1mpE_field( int pdir, su3_vector *src_in, su3_vector *dest ) ;
+void mult_1mpi_field( int pdir, su3_vector *src_in, su3_vector *dest ) ;
+void mult_1mp0_field( int pdir, su3_vector *src_in, su3_vector *dest ) ;
 void mult_2mpi_field( int pdir, su3_vector *src_in, su3_vector *dest ) ;
 
 
@@ -2271,7 +2275,7 @@ static int ask_field_op( FILE *fp, int prompt, int *source_type, char *descrp)
   }
  else if(strcmp("onemm_ylocal_source",savebuf) == 0 ){
     *source_type = ONEMM_yLOCAL_SOURCE  ;
-    strcpy(descrp,"ynemm_ylocal_source");
+    strcpy(descrp,"onemm_ylocal_source");
   }
  else if(strcmp("onemm_zlocal_source",savebuf) == 0 ){
     *source_type = ONEMM_zLOCAL_SOURCE  ;

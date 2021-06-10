@@ -152,51 +152,24 @@ int init_hybrids()
   /* uses field_strength[] for temporary space */
   const int ape_iter = 1 ;
 
-/* Temporary - running in old version6 */
-#define APE_PROJECT
-
-  /**
-   OLD ape parameters
-   NHIT 10
-    SMEAR 32
-   staple_weight 0.25
-   ape_smear( F_OFFSET(link[0]), F_OFFSET(tmplink[0]), staple_weight, u0, 1, 3*NHIT, 0.);
-   **/
-
-
-#ifdef APE_PROJECT
-   if( ape_iter  != 0 )
+  if( ape_iter  != 0 )
      {
        if(this_node==0)printf("init_hybrid::creating field strength tensor WITH APE smearing)\n");
-       // rephase(OFF);  //  hack
        // ape_links
        for(dir=XUP;dir<=TUP;dir++)
 	 FORALLSITES(i,s){
-	   //	   s->tmplink[dir] = *(ape_links + i+dir*sites_on_node) ;
-	   // s->tmplink[dir] = *(ape_links + i+dir*sites_on_node) ;
-	   //	   su3mat_copy( (ape_links + i+dir*sites_on_node) , &(s->tmplink[dir]) ) ;
-   su3mat_copy( (ape_links + 4*i+ dir) , &(s->tmplink[dir]) ) ;
-   //   su3mat_dump(dir, i,   &(s->link[dir])  , &(s->tmplink[dir]) ) ;
-	   //	   s->tmplink[dir] = s->link[dir]  ;
+   		su3mat_copy( (ape_links + 4*i+ dir) , &(s->tmplink[dir]) ) ;
 	 }
-       make_field_strength(F_OFFSET(tmplink[0]), F_OFFSET(field_strength[0]));
-
-       //rephase(ON); // hack
+       
+	make_field_strength(F_OFFSET(tmplink[0]), F_OFFSET(field_strength[0]));
      }
-   else
-     {
-       if(this_node==0)printf("init_hybrid::creating field strength tensor WITH NO APE smearing)\n");
+       else {
+       	if(this_node==0)printf("init_hybrid::creating field strength tensor WITH NO APE smearing)\n");
        make_field_strength(F_OFFSET(link[0]), F_OFFSET(field_strength[0]));
      }
 
-#else
-  if(this_node==0)printf("init_hybrid::creating field strength tensor (no APE smearing)\n");
-  rephase(OFF);
-  make_field_strength(F_OFFSET(link[0]), F_OFFSET(field_strength[0]));
-  rephase(ON);
-#endif
-
   return 0 ;
+
 }
 
 
@@ -366,6 +339,7 @@ void mult_1mp0_field( int pdir, su3_vector *src_in, su3_vector *dest )
   su3_vector *ttt = create_v_field();
   su3_vector *cg_p = create_v_field();
   su3_vector *src = create_v_field();
+  int r0[4] = { 0 , 0 ,0 , 0 }  ;
 
   /** copy source so src_in and dfest can be the same ***/
   copy_v_field(src, src_in);
@@ -383,8 +357,10 @@ void mult_1mp0_field( int pdir, su3_vector *src_in, su3_vector *dest )
 
 	 mult_by_field_strength( dir, pdir, src, cg_p );
 	 mult_rho0_field_all( dir, cg_p, ttt );
+	 //mult_rhois_field( dir, r0, cg_p, ttt, su3_matrix *links) ;
          FORALLSITES(i,s){ add_su3_vector( dest + i,  ttt + i , dest + i ) ; }
 
+	 //mult_rhois_field( dir, r0, src, cg_p, su3_matrix *links) ;
 	 mult_rho0_field_all( dir, src, cg_p );
 	 mult_by_field_strength( dir, pdir,cg_p, ttt  );
 	 FORALLSITES(i,s){ add_su3_vector( dest + i, ttt + i , dest + i ) ; }
@@ -429,7 +405,7 @@ void mult_1mpi_field( int pdir, su3_vector *src_in, su3_vector *dest )
       dir_a = XUP; dir_b = YUP;
   }
 
-  /* use cg_p and ttt as temporary storage */
+  /* temporary storage */
   su3_vector *ttt = create_v_field();
   su3_vector *cg_p = create_v_field();
   su3_vector *src = create_v_field();
@@ -529,6 +505,9 @@ void mult_1mm5_field( int pdir, su3_vector *src_in, su3_vector *dest ){
   FORALLSITES(i,s){ clearvec( dest + i ); }
 
   mult_by_field_strength( (pdir+1)%3, (pdir+2)%3, src, dest );
+
+  destroy_v_field(src);
+
 } /* end mult_1mm5_field */
 
 // ##################################################
@@ -565,6 +544,10 @@ void mult_1mmE_field( int pdir, su3_vector *src_in, su3_vector *dest ){
 	else {
             scalar_mult_su3_vector( cg_p + i, -1.0, dest + i );}
 	}
+
+  destroy_v_field(cg_p);
+  destroy_v_field(src);
+
 } /* END 1mmE */
 
 
