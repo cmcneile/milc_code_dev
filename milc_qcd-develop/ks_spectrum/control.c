@@ -234,6 +234,12 @@ int main(int argc, char *argv[])
 	if(param.time_bc == 0)apply_apbc( ape_links, param.coord_origin[3] );
 	init_hybrids() ; // hack - regenerate field strength - same in setup.c
 
+	init_hybrids() ; 
+	/** a bit of hack, field strength needs to be regenerated  
+	    This is in setup.c as well
+	**/
+
+
 	rephase( ON );
 	invalidate_fermion_links(fn_links);
 

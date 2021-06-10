@@ -100,8 +100,8 @@ CXX = ${MY_CXX}
 # Choices include -g -O, etc
 # Power9 recommendations are -Ofast
 
-#OPT             ?= -O3
-OPT              = -g -O    # for use with valgrind
+OPT             ?= -O3
+#OPT              = -g -O    # for use with valgrind
 
 # OpenMP?
 
@@ -291,7 +291,7 @@ WANTQOP ?= # true # or blank. Implies HAVEQDP, HAVEQOP, HAVEQMP.
 
 WANTQIO = true # true # or blank.  Implies HAVEQMP.
 
-WANTQMP ?= # true or blank.
+WANTQMP ?= true # true or blank.
 
 # QMP_MPI or QMP_SPI
 QMP_BACKEND = QMP_MPI
@@ -299,15 +299,14 @@ QMP_BACKEND = QMP_MPI
 # Edit these locations for the installed SciDAC packages
 # It is assumed that these are the parents of "include" and "lib"
 
-SCIDAC = /home/gray/SciDAC/install
-
+SCIDAC = /home/cmcneile/skylake/code/2016/scidac/install
 # Parallel versions
-QMPPAR ?= ${SCIDAC}/qmp_parallel
-QIOPAR ?= $(SCIDAC)/qio_parallel
+QMPPAR ?= ${SCIDAC}/qmp
+QIOPAR ?= $(SCIDAC)/qio
 
 # Single processor versions
-QMPSNG ?= ${SCIDAC}/qmp/build
-QIOSNG ?= $(SCIDAC)/qio/build
+#QMPSNG ?= ${SCIDAC}/qmp/build
+#QIOSNG ?= $(SCIDAC)/qio/build
 #QLA ?= ${SCIDAC}/qla${TAG}
 
 # Either version
