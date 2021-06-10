@@ -19,13 +19,13 @@ ARCH ?= # skx knl knc hsw pow8 pow9
 #----------------------------------------------------------------------
 # 2. Compiler family
 
-COMPILER ?= intel # intel, ibm, portland, cray-intel
+COMPILER ?= intel # gnu, intel, ibm, portland, cray-intel
 
 #----------------------------------------------------------------------
 # 3. MPP vs Scalar
 
 # Compiling for a parallel machine?  blank for a scalar machine
-MPP ?= true
+MPP ?= false
 
 #----------------------------------------------------------------------
 # 4. Precision 
